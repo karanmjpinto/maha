@@ -6,6 +6,21 @@ Named after **Emilie Kempin-Spyri** (1853–1901) — the first woman in Europe 
 
 ---
 
+## What it does
+
+Emilie is a document assistant for legal work. You upload legal documents (DOCX, PDF) and work with them through a chat interface powered by a local or managed LLM. Core capabilities:
+
+- **Document chat**: ask questions, extract clauses, summarize, compare versions
+- **Projects**: organize documents into matters or workspaces, share with colleagues by email
+- **Tabular review**: run structured clause extraction across a set of documents simultaneously
+- **Workflows**: define reusable AI workflows that run against documents automatically
+- **Version tracking**: upload revised documents and track changes across versions
+- **Swiss case law search**: query federal and cantonal court decisions mid-conversation via MCP
+
+All processing runs on infrastructure you control. No document content leaves your environment unless you configure a cloud model as fallback.
+
+---
+
 ## What is different from Mike
 
 Emilie adds three capabilities on top of Mike's core document assistant:
