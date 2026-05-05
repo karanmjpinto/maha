@@ -52,7 +52,7 @@ async function getClient(entry: MCPClientEntry): Promise<Client | null> {
             const transport = useSSE
                 ? new SSEClientTransport(new URL(entry.config.url), { requestInit })
                 : new StreamableHTTPClientTransport(new URL(entry.config.url), { requestInit });
-            const client = new Client({ name: "emilie", version: "1.0.0" });
+            const client = new Client({ name: "maha", version: "1.0.0" });
             await client.connect(transport);
             entry.client = client;
             return client;

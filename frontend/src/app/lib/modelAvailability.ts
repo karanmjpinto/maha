@@ -35,7 +35,7 @@ export function isProviderAvailable(
 
 export function providerLabel(provider: ModelProvider): string {
     if (provider === "claude") return "Anthropic (Claude)";
-    if (provider === "local") return "Local (Apertus / vLLM)";
+    if (provider === "local") return "Local (Fanar / vLLM)";
     return "Google (Gemini)";
 }
 

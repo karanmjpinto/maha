@@ -1,59 +1,58 @@
-# Emilie
+# Maha
 
-A fork of [Mike](https://github.com/willchen96/mike), extended for Swiss sovereign legal AI.
+A fork of [Emilie](https://github.com/veronica-builds/emilie) (which itself forks [Mike](https://github.com/willchen96/mike)), extended for Qatar sovereign legal AI.
 
-Named after **Emilie Kempin-Spyri** (1853–1901) — the first woman in Europe to earn a law degree, who was then denied the right to practice it in Switzerland. She deserves to be in the stack.
+Named after **Sheikha Maha bint Mansour bin Salman bin Jassim Al Thani** — the first female Qatari judge, appointed to the Court of Cassation in 2010 in a country whose courts had until then been entirely male. She belongs in the stack.
 
 ---
 
 ## What it does
 
-Emilie is a document assistant for legal work. You upload legal documents (DOCX, PDF) and work with them through a chat interface powered by a local or managed LLM. Core capabilities:
+Maha is a document assistant for legal work in Qatar. You upload legal documents (DOCX, PDF) — Arabic or English — and work with them through a chat interface powered by a local or managed LLM. Core capabilities:
 
-- **Document chat**: ask questions, extract clauses, summarize, compare versions
+- **Bilingual document chat (Arabic + English)**: ask questions, extract clauses, summarize, compare versions, in either national working language
+- **Dual-system aware**: handles both Qatari civil law (mainland) and Qatar Financial Centre (QFC) common law in the same workspace
 - **Projects**: organize documents into matters or workspaces, share with colleagues by email
 - **Tabular review**: run structured clause extraction across a set of documents simultaneously
 - **Workflows**: define reusable AI workflows that run against documents automatically
 - **Version tracking**: upload revised documents and track changes across versions
-- **Swiss case law search**: query federal and cantonal court decisions mid-conversation via MCP
+- **Qatar case law and legislation search**: query Al Meezan, QFC Court judgments, Qatari Official Gazette, and AdaaLaty mid-conversation via MCP
+- **Migrant worker accessibility**: respond in Urdu, Hindi, Tagalog, Bengali, Nepali, Malayalam, French and Persian alongside Arabic and English — the working languages of Qatar's 2M+ migrant workforce
 
-All processing runs on infrastructure you control. No document content leaves your environment unless you configure a cloud model as fallback.
+All processing runs on infrastructure you control. No document content leaves Qatar unless you explicitly configure a non-Qatar cloud model as fallback.
 
 ---
 
-## What is different from Mike
+## What is different from Emilie
 
-Emilie adds three capabilities on top of Mike's core document assistant:
+Maha keeps Emilie's sovereign architecture (custom JWT + bcrypt, MCP client, OpenAI-compatible local LLM routing) and replaces the Swiss-specific layers with Qatar-specific ones:
 
-### Sovereign auth
+### Qatar legal data sources
 
-Mike relies on Supabase for user authentication. Emilie replaces this with custom JWT + bcrypt directly against Postgres — no third-party auth service, no data leaving your infrastructure. Users and sessions are stored in your own database.
+The following Qatar legal data sources are public records, made MCP-accessible by Maha. None have public APIs upstream — Maha's MCP servers wrap the public portals.
 
-### MCP client
+| Source | Coverage | Language | Auth |
+|---|---|---|---|
+| [Al Meezan](https://www.almeezan.qa) | Qatari laws, decrees, ministerial decisions, treaties | ar/en | None |
+| [QFC Court & QICDRC judgments](https://www.qicdrc.gov.qa) | Qatar Financial Centre court decisions and arbitration awards | en | None |
+| [Qatar Official Gazette](https://www.gco.gov.qa) | Government communications, official publications | ar | None |
+| [AdaaLaty (Ministry of Justice)](https://www.moj.gov.qa) | Qatari court services, judicial circulars | ar/en | None |
 
-Emilie connects to any [Model Context Protocol](https://modelcontextprotocol.io) server and exposes its tools directly to the LLM. Configure servers in `MCP_SERVERS` and they are available in every conversation without code changes.
+The MCP servers in `backend/mcp-servers/` are wrappers around these public portals. They are part of this repository — fork them, run them on your own infrastructure, and configure `MCP_SERVERS` to point at your instances.
 
-The following Swiss legal data sources are open, free, and MCP-ready:
+### Local model support — Fanar
 
-| Source | Coverage | Auth |
-|---|---|---|
-| [Entscheidsuche](https://entscheidsuche.ch) | Federal + 22 cantonal courts, de/fr/it | None |
-| [OpenCaseLaw.ch](https://opencaselaw.ch) | 971K+ decisions (1875–present), all 26 cantons, citation graph, legislation | None |
-| [Online Kommentar](https://onlinekommentar.ch) | Swiss legal commentaries, article-level, multilingual | None |
-| [Fedlex](https://fedlex.data.admin.ch) | Complete Swiss federal legislation, all 3 national languages | None |
+Maha routes to any OpenAI-compatible inference endpoint. Point `VLLM_BASE_URL` at a local or managed server and select "Local Model" in the UI.
 
-### Local model support
+Recommended model: **[Fanar](https://fanar.qa)**, the Arabic-first open-weights LLM developed by the Qatar Computing Research Institute (QCRI) at Hamad Bin Khalifa University. Built specifically for Modern Standard Arabic and Qatari/Gulf dialect, with strong English bilingual capability.
 
-Emilie routes to any OpenAI-compatible inference endpoint — no OpenAI dependency. Point `VLLM_BASE_URL` at a local or managed server and select "Local Model" in the UI.
-
-Recommended model: **[Apertus](https://www.swiss-ai.org/apertus)**, the open-weights LLM developed by ETH Zurich, EPFL, and the Swiss National Supercomputing Centre. Apache 2.0 licensed. Trained across 1,000+ languages with strong coverage of Swiss national languages.
-
-Two deployment paths:
+Three deployment paths:
 
 | Path | How | Data stays |
 |---|---|---|
-| Self-hosted | Run Apertus via [vLLM](https://github.com/vllm-project/vllm) on your own hardware | Your infrastructure |
-| Managed Swiss | [Infomaniak AI Tools](https://www.infomaniak.com/en/hosting/ai-services) — hosts Apertus in Swiss data centers | Switzerland |
+| Self-hosted | Run Fanar via [vLLM](https://github.com/vllm-project/vllm) on your own hardware | Your infrastructure |
+| Managed Qatar | Fanar API hosted by QCRI / HBKU | Qatar |
+| Sovereign cloud | Deploy via [MEEZA](https://www.meeza.qa) Tier IV data centers | Qatar |
 
 ---
 
@@ -62,13 +61,36 @@ Two deployment paths:
 | Layer | Option |
 |---|---|
 | Auth | Custom JWT + bcrypt — no third-party service |
-| Database | Postgres (self-hosted, Infomaniak VPS, or any provider) |
-| LLM | Apertus (self-hosted via vLLM) or Infomaniak AI Tools |
-| Case law | Entscheidsuche, OpenCaseLaw.ch, Fedlex, Online Kommentar — all free and open |
-| Object storage | [Infomaniak Object Storage](https://www.infomaniak.com/en/hosting/cloud-object-storage) (S3-compatible, Switzerland) |
-| App | Emilie, self-hosted |
+| Database | Postgres (self-hosted or on a Qatar provider — MEEZA, Ooredoo Cloud, Microsoft Qatar Region) |
+| LLM | Fanar (self-hosted via vLLM, or QCRI managed API) |
+| Case law and legislation | Al Meezan, QFC Court, Qatar Official Gazette, AdaaLaty — public records, MCP wrappers in this repo |
+| Object storage | MEEZA Object Storage, Ooredoo Cloud, or any S3-compatible store |
+| App | Maha, self-hosted |
 
-Cloud providers (Anthropic, Google) remain available as fallback but are not required.
+Cloud providers (Anthropic, Google) remain available as fallback but are not required and route through non-Qatar regions.
+
+---
+
+## Languages
+
+UI strings: English (default). Localization scaffold lives in `frontend/src/locales/`.
+
+AI conversational responses: Arabic and English are first-class. The model also responds in the user's input language across:
+
+| Code | Language | Why |
+|---|---|---|
+| `ar` | Arabic | Official language; mainland Qatari courts |
+| `en` | English | Working language; QFC courts; international contracts |
+| `ur` | Urdu | Largest single migrant nationality (Pakistani workforce) |
+| `hi` | Hindi | Indian workforce |
+| `tl` | Tagalog (Filipino) | Filipino workforce — domestic, hospitality |
+| `bn` | Bengali | Bangladeshi workforce — construction, services |
+| `ne` | Nepali | Nepali workforce — construction |
+| `ml` | Malayalam | Kerala workforce |
+| `fr` | French | Maghrebi expatriate community |
+| `fa` | Persian (Farsi) | Iranian community |
+
+Migrant labour rights are an under-served legal access problem in Qatar. Maha is built so a worker's lawyer, NGO, or labour-court translator can interact in the worker's first language end-to-end.
 
 ---
 
@@ -119,10 +141,10 @@ Open `http://localhost:3000`.
 
 ## Required services
 
-- **Postgres**: Any Postgres database. Auth is handled by Emilie directly using JWT + bcrypt — no third-party auth service required. For a sovereign deployment, run Postgres on your own infrastructure or an Infomaniak VPS.
-- **Object storage**: Any S3-compatible store. Infomaniak Object Storage (Switzerland) is the recommended option.
-- **Model**: A local inference endpoint via `VLLM_BASE_URL` (Apertus via vLLM, or Infomaniak AI Tools). Anthropic and Gemini API keys are supported as a fallback but route documents through US cloud servers.
-- **LibreOffice**: Required for DOC/DOCX to PDF conversion. Runs entirely locally — no data leaves your machine. Maintained by The Document Foundation (German non-profit, open-source).
+- **Postgres**: any Postgres database. Auth handled by Maha directly (JWT + bcrypt). For sovereign deployment in Qatar, run Postgres on MEEZA, Ooredoo Cloud, or a self-managed VM.
+- **Object storage**: any S3-compatible store. MEEZA Object Storage is the recommended Qatar-resident option.
+- **Model**: a local inference endpoint via `VLLM_BASE_URL` (Fanar via vLLM, or QCRI managed API). Anthropic and Gemini API keys are supported as fallback but route documents through non-Qatar cloud servers.
+- **LibreOffice**: required for DOC/DOCX to PDF conversion. Runs entirely locally — no data leaves your machine.
 
 ---
 
@@ -131,14 +153,14 @@ Open `http://localhost:3000`.
 Add to `backend/.env`:
 
 ```env
-# Option A: self-hosted Apertus via vLLM
+# Option A: self-hosted Fanar via vLLM
 VLLM_BASE_URL=http://localhost:8000/v1
-VLLM_MAIN_MODEL=<apertus-model-id>
+VLLM_MAIN_MODEL=fanar
 
-# Option B: Infomaniak AI Tools (Swiss managed, includes Apertus)
-VLLM_BASE_URL=https://api.infomaniak.com/2/ai/<product_id>/openai/v1
-VLLM_API_KEY=<infomaniak-api-key>
-VLLM_MAIN_MODEL=apertus
+# Option B: QCRI managed Fanar API
+VLLM_BASE_URL=https://api.fanar.qa/v1
+VLLM_API_KEY=<qcri-api-key>
+VLLM_MAIN_MODEL=fanar
 ```
 
 Select "Local Model" in the chat model picker once `VLLM_BASE_URL` is set.
@@ -151,13 +173,14 @@ Add to `backend/.env`:
 
 ```env
 MCP_SERVERS=[
-  {"name":"entscheidsuche","url":"https://mcp.entscheidsuche.ch/mcp"},
-  {"name":"opencaselaw","url":"https://mcp.opencaselaw.ch/mcp"},
-  {"name":"fedlex","url":"https://fedlex-connector.ch/mcp"}
+  {"name":"al-meezan","url":"http://localhost:7010/mcp"},
+  {"name":"qfc-court","url":"http://localhost:7011/mcp"},
+  {"name":"qatar-gazette","url":"http://localhost:7012/mcp"},
+  {"name":"adaalaty","url":"http://localhost:7013/mcp"}
 ]
 ```
 
-Multiple servers are supported. Each server's tools appear automatically in every conversation. API keys are optional — omit the `apiKey` field for servers that require no authentication.
+The MCP server implementations live under `backend/mcp-servers/`. They scrape the public Qatar legal portals listed above. Each can be run independently with `npm run mcp:<name>`.
 
 ---
 
@@ -175,4 +198,4 @@ npm run lint --prefix frontend
 
 AGPL-3.0-only. See `LICENSE`.
 
-This project is a fork of [Mike](https://github.com/willchen96/mike) by Will Chen, used under AGPL-3.0.
+This project is a fork of [Emilie](https://github.com/veronica-builds/emilie) by Veronica, which is a fork of [Mike](https://github.com/willchen96/mike) by Will Chen, both used under AGPL-3.0.
