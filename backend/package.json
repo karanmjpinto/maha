@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "mcp:install": "npm install --prefix mcp-servers/shared && npm install --prefix mcp-servers/al-meezan && npm install --prefix mcp-servers/qfc-court && npm install --prefix mcp-servers/qatar-gazette && npm install --prefix mcp-servers/adaalaty",
+    "mcp:build": "npm run build --prefix mcp-servers/shared && npm run build --prefix mcp-servers/al-meezan && npm run build --prefix mcp-servers/qfc-court && npm run build --prefix mcp-servers/qatar-gazette && npm run build --prefix mcp-servers/adaalaty",
+    "mcp:al-meezan": "npm run start --prefix mcp-servers/al-meezan",
+    "mcp:qfc-court": "npm run start --prefix mcp-servers/qfc-court",
+    "mcp:qatar-gazette": "npm run start --prefix mcp-servers/qatar-gazette",
+    "mcp:adaalaty": "npm run start --prefix mcp-servers/adaalaty"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

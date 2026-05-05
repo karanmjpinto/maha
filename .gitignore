@@ -16,3 +16,9 @@ next-env.d.ts
 .DS_Store
 .vercel
 coverage
+
+# MCP server build artifacts and deps
+backend/mcp-servers/*/node_modules
+backend/mcp-servers/*/dist
+backend/mcp-servers/shared/node_modules
+backend/mcp-servers/shared/dist

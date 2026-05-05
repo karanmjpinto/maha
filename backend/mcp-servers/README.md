@@ -1,48 +1,103 @@
 # Maha MCP Servers — Qatar Legal Data
 
-This directory holds MCP (Model Context Protocol) server implementations that wrap public Qatar legal data portals. None of these portals expose a stable API, so each server is a focused scraper that exposes a small set of tools (`search`, `fetch`, etc.) over the MCP HTTP transport.
-
-The servers are independent of the main Maha backend. Run them on the same host or on separate Qatar-resident infrastructure (MEEZA, Ooredoo Cloud) and point `MCP_SERVERS` at them.
+Each subdirectory is a standalone MCP server that wraps a public Qatar legal data portal and exposes its content as tools to the Maha LLM.
 
 ## Servers
 
 | Directory | Source portal | Default port | Status |
 |---|---|---|---|
-| `al-meezan/` | https://www.almeezan.qa — Qatari laws, decrees, ministerial decisions, treaties (ar/en) | 7010 | scaffold |
-| `qfc-court/` | https://www.qicdrc.gov.qa — QFC Civil & Commercial Court judgments, arbitration awards (en) | 7011 | scaffold |
-| `qatar-gazette/` | https://www.gco.gov.qa — Qatar Official Gazette (ar) | 7012 | scaffold |
-| `adaalaty/` | https://www.moj.gov.qa — Ministry of Justice services and judicial circulars (ar/en) | 7013 | scaffold |
+| [`al-meezan/`](./al-meezan) | https://www.almeezan.qa — Qatari laws, decrees, ministerial decisions, treaties (ar/en) | 7010 | implemented; selectors documented, awaiting Qatar-IP verification |
+| [`qfc-court/`](./qfc-court) | https://www.qicdrc.gov.qa — QFC Civil & Commercial Court judgments, arbitration awards (en) | 7011 | implemented and verified live; uses the upstream JSON list endpoint |
+| [`qatar-gazette/`](./qatar-gazette) | https://www.gco.gov.qa — Qatar Official Gazette (ar) | 7012 | implemented; selectors documented, awaiting Qatar-IP verification |
+| [`adaalaty/`](./adaalaty) | https://www.moj.gov.qa — Ministry of Justice services and judicial circulars (ar/en) | 7013 | implemented; selectors documented, awaiting Qatar-IP verification |
 
-## Tool surface (target)
+The QICDRC portal turned out to render its judgment listing from a JSON endpoint at `/judgements/list?page=N&items_per_page=K` (note the British spelling). The `qfc-court` server uses that JSON directly instead of scraping HTML and exposes 496+ judgments with neutral citations, judgement dates, parties, judges, keywords, and AI summaries.
 
-Each server exposes at minimum:
+The other three portals (Al Meezan, GCO Gazette, MoJ) restrict access to Qatar IPs at the WAF/Cloudflare layer. Their scrapers were written based on the documented Drupal theme and standard portal structures — the selectors will work when run from a Qatar-resident host (MEEZA, Ooredoo Cloud, Microsoft Qatar Region) but should be tightened against live HTML on first deploy.
 
-- `search(query: string, lang?: "ar" | "en", date_from?: string, date_to?: string)` — full-text search returning result IDs, titles, and snippets.
-- `fetch(id: string)` — return the full text of a result by ID.
-- `list_recent(limit?: number)` — most recently published items.
+## Tool surface
 
-Additional source-specific tools:
+Every server implements at minimum:
 
-- `al-meezan`: `find_law(law_number: string, year: number)`, `find_article(law_id: string, article_number: string)`
-- `qfc-court`: `find_judgment(case_number: string)`, `list_arbitration_awards(year?: number)`
-- `qatar-gazette`: `list_issues(year: number)`, `fetch_issue(issue_number: string, year: number)`
-- `adaalaty`: `list_circulars()`, `find_circular(circular_number: string)`
+- `search(query, lang?, limit?)` — full-text search.
+- `fetch(id, lang?)` — retrieve the full text and metadata of a single record.
+- `list_recent` or a source-specific listing (`list_issues`, `list_circulars`, `list_services`).
 
-## Running
+Each `search` returns objects of type `SearchResult { id, title, snippet?, url, lang?, date?, source }`. Each `fetch` returns `FetchedDocument { id, title, url, lang?, text, metadata, pdfUrls? }`.
+
+## Running locally
+
+From the repo root:
 
 ```bash
-# install deps
-npm install --prefix backend/mcp-servers/al-meezan
+# install dependencies for shared lib + all four servers
+npm run mcp:install --prefix backend
+
+# build all four
+npm run mcp:build --prefix backend
 
 # run a single server
-npm run start --prefix backend/mcp-servers/al-meezan
+npm run mcp:qfc-court --prefix backend
 
-# or use the convenience script from the backend root
-npm run mcp:al-meezan --prefix backend
+# or run all four in separate terminals:
+npm run mcp:al-meezan     --prefix backend
+npm run mcp:qfc-court     --prefix backend
+npm run mcp:qatar-gazette --prefix backend
+npm run mcp:adaalaty      --prefix backend
 ```
 
-## Legal note
+Each server listens on its default port (7010/7011/7012/7013) at `/mcp` with a `/healthz` endpoint. Override the port with `PORT=…`.
 
-These scrapers fetch public legal records that the State of Qatar publishes for free public access. They respect each portal's `robots.txt`, throttle requests, and identify themselves with a `User-Agent` header containing a contact URL. Cache aggressively to minimize load on upstream portals.
+## Wiring into the Maha backend
 
-If you operate one of the upstream portals and want to discuss a direct feed, the contact details are in the project README.
+Set in `backend/.env`:
+
+```env
+MCP_SERVERS=[
+  {"name":"al-meezan","url":"http://localhost:7010/mcp"},
+  {"name":"qfc-court","url":"http://localhost:7011/mcp"},
+  {"name":"qatar-gazette","url":"http://localhost:7012/mcp"},
+  {"name":"adaalaty","url":"http://localhost:7013/mcp"}
+]
+```
+
+The Maha backend's MCP client (`backend/src/lib/mcp.ts`) connects to each on startup and exposes their tools to every conversation.
+
+## Architecture
+
+```
+mcp-servers/
+├── shared/                  # @maha/mcp-shared — HTTP client, MCP bootstrap, cache
+│   └── src/
+│       ├── server.ts        # startMcpServer() — Express + Streamable HTTP transport
+│       ├── http.ts          # throttled HttpClient with polite User-Agent
+│       ├── cache.ts         # in-memory LRU
+│       └── types.ts         # SearchResult, FetchedDocument
+├── al-meezan/               # Qatari laws/decrees portal scraper
+├── qfc-court/               # QICDRC JSON API adapter
+├── qatar-gazette/           # Qatar Official Gazette scraper
+└── adaalaty/                # MoJ portal scraper
+```
+
+Each server is independent: separate `package.json`, separate `dist/`, separate process. They share only the `shared` package via a `file:` dependency.
+
+## Polite-scraping policy
+
+Every HTTP request goes through `HttpClient`, which:
+
+- sets a descriptive `User-Agent` identifying the project and a contact URL
+- throttles to one request every 1.5–2 seconds per host
+- caches `search` and `fetch` results in-process for 15 minutes
+
+Cache aggressively in production. If a portal operator wants a direct feed instead, the contact details are in the project README.
+
+## Verification status
+
+| Server | Live-tested | Notes |
+|---|---|---|
+| `qfc-court` | yes | Verified against live qicdrc.gov.qa from outside Qatar — JSON endpoint is open. `list_recent`, `search`, and `fetch` all return real data. |
+| `al-meezan` | no | Selectors based on documented Drupal theme. Run `probe` after deploy and tighten. |
+| `qatar-gazette` | no | Cloudflare-protected; selectors based on GCO theme. |
+| `adaalaty` | no | Geofenced; selectors based on standard Drupal theme. |
+
+When deploying to Qatar-resident infrastructure, run each non-verified server's `search` and `list_*` against known queries, compare the parsed output to the upstream HTML, and update the selectors in `src/scraper.ts` if the real markup differs.

@@ -1,0 +1,21 @@
+{
+  "name": "@maha/mcp-shared",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
+}
