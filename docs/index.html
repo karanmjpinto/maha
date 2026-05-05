@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maha — Sovereign legal AI for Qatar</title>
+    <meta
+        name="description"
+        content="A self-hosted document assistant for Qatari law. Handles mainland civil law and the QFC common law system, in ten of the languages used in Qatar's courts and workplaces."
+    />
+    <meta property="og:title" content="Maha — Sovereign legal AI for Qatar" />
+    <meta
+        property="og:description"
+        content="Open-source, self-hosted legal AI for Qatar. Bilingual document chat, dual-system aware (mainland civil + QFC common law), built for migrant labour access in ten languages."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://karanmjpinto.github.io/maha/" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+    <header class="nav">
+        <div class="container nav-inner">
+            <a class="brand" href="#top" aria-label="Maha — home">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span class="brand-name">Maha</span>
+            </a>
+            <nav class="nav-links" aria-label="Primary">
+                <a href="#why">Why</a>
+                <a href="#capabilities">Capabilities</a>
+                <a href="#stack">Stack</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#contribute">Contribute</a>
+            </nav>
+            <a class="btn btn-ghost" href="https://github.com/karanmjpinto/maha" rel="noopener">
+                GitHub →
+            </a>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+                <p class="eyebrow">Open source · AGPL-3.0 · Built in Qatar</p>
+                <h1 class="display">
+                    Sovereign legal AI <span class="serif-it">for Qatar.</span>
+                </h1>
+                <p class="lede">
+                    Maha is a self-hosted document assistant that handles both Qatar's
+                    mainland civil law and the QFC common law system, in ten of the
+                    languages spoken in Qatar's courts and workplaces.
+                </p>
+                <div class="cta-row">
+                    <a class="btn btn-primary" href="https://github.com/karanmjpinto/maha" rel="noopener">
+                        View on GitHub
+                    </a>
+                    <a class="btn btn-secondary" href="#why">
+                        Read the brief
+                    </a>
+                </div>
+                <p class="hero-note">
+                    Forks <a href="https://github.com/veronica-builds/emilie" rel="noopener">Emilie</a>
+                    (Swiss legal AI), which forks
+                    <a href="https://github.com/willchen96/mike" rel="noopener">Mike</a>.
+                </p>
+            </div>
+        </section>
+
+        <!-- NAMESAKE -->
+        <section class="namesake">
+            <div class="container narrow">
+                <p class="kicker">Named after</p>
+                <h2 class="serif large">Sheikha Maha bint Mansour Al Thani</h2>
+                <p>
+                    The first female Qatari judge, appointed to the Court of Cassation in
+                    2010 in courts that had until then been entirely male. She belongs in
+                    the stack.
+                </p>
+            </div>
+        </section>
+
+        <!-- WHY -->
+        <section id="why" class="section dark">
+            <div class="container">
+                <p class="kicker light">Why this exists</p>
+                <h2 class="serif large light">
+                    Most legal AI was not built with Qatar in mind.
+                </h2>
+                <div class="grid grid-3">
+                    <article class="card-dark">
+                        <h3>Two legal systems, one workspace</h3>
+                        <p>
+                            Mainland Qatar is a civil law jurisdiction with codified
+                            statutes in Arabic. The Qatar Financial Centre is a parallel
+                            common law jurisdiction with its own courts and English-language
+                            judgments. Most legal AI handles one or the other. Maha handles
+                            both, and disambiguates which applies before answering.
+                        </p>
+                    </article>
+                    <article class="card-dark">
+                        <h3>Built for everyone in the courtroom</h3>
+                        <p>
+                            Lawyers, paralegals, NGOs — and the migrant workers whose rights
+                            they defend. Maha responds in Arabic, English, Urdu, Hindi,
+                            Tagalog, Bengali, Nepali, Malayalam, French and Persian, while
+                            citing the authoritative Arabic or English source text.
+                        </p>
+                    </article>
+                    <article class="card-dark">
+                        <h3>Your data stays in Qatar</h3>
+                        <p>
+                            Self-hosted on infrastructure you control. Designed around Fanar
+                            (QCRI's open-weights LLM) and Qatar-resident hosts like MEEZA
+                            and Ooredoo Cloud. Public Qatar legal sources are mirrored as
+                            MCP servers running inside your perimeter.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPABILITIES -->
+        <section id="capabilities" class="section">
+            <div class="container">
+                <p class="kicker">Capabilities</p>
+                <h2 class="serif large">What Maha does today</h2>
+                <div class="capability-list">
+                    <div class="capability">
+                        <h3>Bilingual document chat</h3>
+                        <p>
+                            Upload Arabic or English contracts. Ask questions, extract
+                            clauses, summarise, compare versions. Citations are pinned to
+                            the verbatim source text and the page it appeared on.
+                        </p>
+                    </div>
+                    <div class="capability">
+                        <h3>Dual-system aware</h3>
+                        <p>
+                            The system prompt teaches the model Qatar's two regimes. Ask
+                            about a QFC matter and you will not get mainland answers.
+                            Where ambiguous, Maha asks before assuming.
+                        </p>
+                    </div>
+                    <div class="capability">
+                        <h3>Tabular review</h3>
+                        <p>
+                            Run structured clause extraction across hundreds of documents
+                            at once. Get a comparable matrix instead of a stack of
+                            summaries.
+                        </p>
+                    </div>
+                    <div class="capability">
+                        <h3>Workflows</h3>
+                        <p>
+                            Define reusable AI workflows that run automatically against any
+                            document. Ship templates for common Qatari work: kafala
+                            documents, QFC contracts, employment files, family matters.
+                        </p>
+                    </div>
+                    <div class="capability">
+                        <h3>Live legal search</h3>
+                        <p>
+                            Four MCP servers wrap the public Qatar legal portals: Al Meezan,
+                            QFC Court (496+ judgments verified live), Qatar Official
+                            Gazette, and the Ministry of Justice. Citations come back with
+                            authoritative source URLs.
+                        </p>
+                    </div>
+                    <div class="capability">
+                        <h3>Migrant labour access</h3>
+                        <p>
+                            Ask in Urdu or Tagalog about your end-of-service benefits and
+                            get an answer grounded in the Qatar Labour Law and Wage
+                            Protection System, with the relevant Arabic article cited
+                            verbatim.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STACK -->
+        <section id="stack" class="section muted">
+            <div class="container">
+                <p class="kicker">Sovereign stack</p>
+                <h2 class="serif large">Every layer chosen so data stays in Qatar.</h2>
+                <div class="stack-table">
+                    <div class="stack-row stack-head">
+                        <div>Layer</div>
+                        <div>Choice</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>Auth</div>
+                        <div>Custom JWT + bcrypt against your Postgres. No third-party identity provider.</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>Database</div>
+                        <div>Postgres on MEEZA, Ooredoo Cloud, Microsoft Qatar Region, or self-managed.</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>LLM</div>
+                        <div>Fanar (QCRI / HBKU) via vLLM, or QCRI's managed Fanar API. Anthropic and Gemini available as fallback.</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>Object storage</div>
+                        <div>MEEZA Object Storage, Ooredoo Cloud, or any S3-compatible store.</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>Legal data</div>
+                        <div>Al Meezan, QFC Court, GCO Gazette, MoJ — public records, wrapped as MCP servers in this repo.</div>
+                    </div>
+                    <div class="stack-row">
+                        <div>App</div>
+                        <div>Maha, AGPL-3.0, self-hosted from this repository.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LANGUAGES -->
+        <section class="section">
+            <div class="container">
+                <p class="kicker">Languages</p>
+                <h2 class="serif large">Ten languages. One legal stack.</h2>
+                <p class="section-lede">
+                    Qatar's official languages are Arabic and English. Its working
+                    languages — in courts, on construction sites, in domestic homes — are
+                    many more. Maha responds in the user's first language and cites the
+                    Arabic or English authority verbatim.
+                </p>
+                <div class="lang-grid">
+                    <div class="lang"><span class="lang-native">العربية</span><span class="lang-en">Arabic · official, mainland courts</span></div>
+                    <div class="lang"><span class="lang-native">English</span><span class="lang-en">QFC working language, contracts</span></div>
+                    <div class="lang"><span class="lang-native">اردو</span><span class="lang-en">Urdu · Pakistani workforce</span></div>
+                    <div class="lang"><span class="lang-native">हिन्दी</span><span class="lang-en">Hindi · Indian workforce</span></div>
+                    <div class="lang"><span class="lang-native">Tagalog</span><span class="lang-en">Filipino domestic and hospitality</span></div>
+                    <div class="lang"><span class="lang-native">বাংলা</span><span class="lang-en">Bengali · Bangladeshi workforce</span></div>
+                    <div class="lang"><span class="lang-native">नेपाली</span><span class="lang-en">Nepali · construction, security</span></div>
+                    <div class="lang"><span class="lang-native">മലയാളം</span><span class="lang-en">Malayalam · Kerala workforce</span></div>
+                    <div class="lang"><span class="lang-native">Français</span><span class="lang-en">Maghrebi expatriate community</span></div>
+                    <div class="lang"><span class="lang-native">فارسی</span><span class="lang-en">Persian · Iranian community</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROADMAP -->
+        <section id="roadmap" class="section dark">
+            <div class="container">
+                <p class="kicker light">Roadmap</p>
+                <h2 class="serif large light">An honest plan, in public.</h2>
+                <div class="timeline">
+                    <article class="milestone">
+                        <header>
+                            <span class="milestone-when">Q2 2026</span>
+                            <span class="milestone-status status-done">Shipped</span>
+                        </header>
+                        <h3>Foundations</h3>
+                        <ul>
+                            <li>Fork from Emilie. Rebrand. Sovereign stack documented.</li>
+                            <li>System prompt teaches Qatar's dual jurisdiction.</li>
+                            <li>Four MCP servers built — QFC Court verified live.</li>
+                            <li>Locale scaffold for ten languages with RTL flags.</li>
+                        </ul>
+                    </article>
+                    <article class="milestone">
+                        <header>
+                            <span class="milestone-when">Q3 2026</span>
+                            <span class="milestone-status status-now">In progress</span>
+                        </header>
+                        <h3>Inside-Qatar deploy</h3>
+                        <ul>
+                            <li>First deploy on MEEZA. Verify all four MCP scrapers against live portals.</li>
+                            <li>Fanar integration end to end — both self-hosted vLLM and the QCRI managed API.</li>
+                            <li>UI internationalisation shipping for all ten languages, RTL polish.</li>
+                            <li>Document chat private beta with the first design partner.</li>
+                        </ul>
+                    </article>
+                    <article class="milestone">
+                        <header>
+                            <span class="milestone-when">Q4 2026</span>
+                            <span class="milestone-status status-soon">Planned</span>
+                        </header>
+                        <h3>Public beta</h3>
+                        <ul>
+                            <li>Public beta open to law firms and in-house teams.</li>
+                            <li>Workflow library for common Qatari matters: kafala documents, QFC contracts, employment files, family law.</li>
+                            <li>Voice input for migrant-rights flows where literacy is a barrier.</li>
+                            <li>First NGO pilot for migrant worker labour access in Urdu and Tagalog.</li>
+                        </ul>
+                    </article>
+                    <article class="milestone">
+                        <header>
+                            <span class="milestone-when">Q1 2027</span>
+                            <span class="milestone-status status-soon">Planned</span>
+                        </header>
+                        <h3>General availability</h3>
+                        <ul>
+                            <li>Native Arabic UI polish — typography, RTL nuance.</li>
+                            <li>Court e-filing integrations where Qatari courts permit.</li>
+                            <li>Audit logs and document retention policies fit for regulated firms.</li>
+                            <li>Multi-tenant deployment guide for legal aid organisations.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTRIBUTE -->
+        <section id="contribute" class="section">
+            <div class="container">
+                <p class="kicker">Build with us</p>
+                <h2 class="serif large">A short list of people we'd love to hear from.</h2>
+                <p class="section-lede">
+                    Maha is open source under AGPL-3.0. Issues and pull requests are
+                    welcome from anyone. Some specific gaps where help would compound:
+                </p>
+                <div class="grid grid-2 contribute-grid">
+                    <article class="contribute-card">
+                        <h3>Qatari-licensed lawyers</h3>
+                        <p>
+                            Review the system prompt, the workflow library, and the
+                            disambiguation rules between mainland civil law and the QFC.
+                            Tell us where the model is glib and where it is wrong.
+                        </p>
+                    </article>
+                    <article class="contribute-card">
+                        <h3>Arabic-fluent front-end engineers</h3>
+                        <p>
+                            Land the RTL polish for Arabic, Urdu, Persian. Typography,
+                            input direction, mirrored layouts, the small pixel decisions
+                            that make a product feel native instead of translated.
+                        </p>
+                    </article>
+                    <article class="contribute-card">
+                        <h3>Migrant-rights organisations</h3>
+                        <p>
+                            Pilot the Urdu, Tagalog, Bengali, and Nepali flows with real
+                            cases. Help us build the right workflow templates for
+                            end-of-service, kafala transfers, wage protection complaints.
+                        </p>
+                    </article>
+                    <article class="contribute-card">
+                        <h3>Sovereign infrastructure operators</h3>
+                        <p>
+                            MEEZA, Ooredoo Cloud, QCRI Fanar team — if you operate the
+                            stack Maha is designed for, tell us how to be a good citizen of
+                            it. We will document, contribute back, and credit.
+                        </p>
+                    </article>
+                </div>
+                <div class="contribute-cta">
+                    <a class="btn btn-primary" href="https://github.com/karanmjpinto/maha/issues" rel="noopener">
+                        Open an issue
+                    </a>
+                    <a class="btn btn-secondary" href="https://github.com/karanmjpinto/maha" rel="noopener">
+                        Star the repo
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container footer-inner">
+                <div>
+                    <p class="brand-name">Maha</p>
+                    <p class="footer-tag">
+                        Sovereign legal AI for Qatar. Open source under AGPL-3.0.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/karanmjpinto/maha" rel="noopener">Source</a>
+                    <a href="https://github.com/karanmjpinto/maha/blob/main/ROADMAP.md" rel="noopener">Roadmap</a>
+                    <a href="https://github.com/karanmjpinto/maha/blob/main/CONTRIBUTING.md" rel="noopener">Contributing</a>
+                    <a href="https://github.com/karanmjpinto/maha/blob/main/LICENSE" rel="noopener">License</a>
+                </div>
+            </div>
+            <div class="container footer-fineprint">
+                <p>
+                    Lineage: <a href="https://github.com/willchen96/mike" rel="noopener">Mike</a> →
+                    <a href="https://github.com/veronica-builds/emilie" rel="noopener">Emilie</a> →
+                    Maha. Each fork preserves the AGPL-3.0 license of its parents.
+                </p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

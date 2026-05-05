@@ -1,5 +1,9 @@
 # Maha
 
+**Sovereign legal AI for Qatar.** A self-hosted document assistant that handles both Qatar's mainland civil law and the QFC common law system, in ten of the languages spoken in Qatar's courts and workplaces.
+
+> **Site**: [karanmjpinto.github.io/maha](https://karanmjpinto.github.io/maha/) · **Roadmap**: [ROADMAP.md](./ROADMAP.md) · **Contribute**: [CONTRIBUTING.md](./CONTRIBUTING.md)
+
 A fork of [Emilie](https://github.com/veronica-builds/emilie) (which itself forks [Mike](https://github.com/willchen96/mike)), extended for Qatar sovereign legal AI.
 
 Named after **Sheikha Maha bint Mansour bin Salman bin Jassim Al Thani** — the first female Qatari judge, appointed to the Court of Cassation in 2010 in a country whose courts had until then been entirely male. She belongs in the stack.
@@ -193,6 +197,12 @@ npm run lint --prefix frontend
 ```
 
 ---
+
+## Roadmap and contributors
+
+- **Roadmap**: [ROADMAP.md](./ROADMAP.md) — quarterly milestones, kept honest. Q2 2026 (foundations) is shipped; Q3 2026 (inside-Qatar deploy) is in progress.
+- **Contributing**: [CONTRIBUTING.md](./CONTRIBUTING.md) — the four kinds of help that compound here (Qatari-licensed lawyers, Arabic-fluent front-end engineers, migrant-rights organisations, sovereign infrastructure operators).
+- **Landing site**: [karanmjpinto.github.io/maha](https://karanmjpinto.github.io/maha/) — public summary of what Maha does and why.
 
 ## License
 
